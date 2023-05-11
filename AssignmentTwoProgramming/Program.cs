@@ -28,7 +28,7 @@ class QueenslandRevenue
         Console.WriteLine("Please enter last year contestants number participated in the competitions - (Number should be between 0 and 30): ");
         LastYearContestantsNum = Convert.ToInt32(Console.ReadLine());
 
-        if (!(LastYearContestantsNum >= 0 && LastYearContestantsNum < 30))
+        if (!(LastYearContestantsNum >= 0 && LastYearContestantsNum <= 30))
             Console.WriteLine("A valid contestants number should be between 0 and 30"); 
         else
         {
@@ -36,7 +36,7 @@ class QueenslandRevenue
             ThisYearContestantsNum = Convert.ToInt32(Console.ReadLine());
             
 
-            if (!(ThisYearContestantsNum >= 0 && ThisYearContestantsNum < 30))
+            if (!(ThisYearContestantsNum >= 0 && ThisYearContestantsNum <= 30))
                 Console.WriteLine("A valid contestants number should be between 0 and 30");
 
             // Step 2

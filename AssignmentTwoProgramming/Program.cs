@@ -13,10 +13,16 @@
 //Case 2: If the competition is equal to or bigger than last year’s but not more than twice as big, display 'The competition is bigger than ever!'
 //Case 3: If the competition is smaller than last year’s, display 'A tighter race this year! Come out and cast your vote!'
 
+// Step 4:
+// After the user enters the number of contestants in this year’s competition, the user is prompted to enter the appropriate number of contestant
+// names and a code for each contestant that indicates the type of talent:
+// S for singing,
+// D for dancing,
+// M for playing a musical instrument or
+// O for other.
+// Make sure that all entered codes are valid, and if not, re-prompt the user to enter a correct code.
+
 using System;
-
-using static System.Console;
-
 class QueenslandRevenue
 {
     static void Main()
@@ -24,8 +30,15 @@ class QueenslandRevenue
         // Step 1
         int LastYearContestantsNum;
         int ThisYearContestantsNum;
-        string UserNamesInput;
-        char ContestantTalent;
+        int x;
+       
+        string[] UserNamesInputs = new string[4];
+        char[] ContestantTalent = { 'S', 'D', 'M', 'O' };
+        char SINGING = 'S';
+        char DANCING = 'D';
+        char MUSICAL = 'M';
+        char OTHER = 'O';
+        
 
         Console.WriteLine("Please enter the number of contestants participated in the competitions last year - (Number should be between 0 and 30): ");
         LastYearContestantsNum = Convert.ToInt32(Console.ReadLine());
@@ -48,30 +61,54 @@ class QueenslandRevenue
 
                 // Step 3
                 if (ThisYearContestantsNum > (2 * LastYearContestantsNum))
-                    Console.WriteLine("The competition is more than twice as big this year!");
+                    Console.WriteLine("The competition is more than twice as big this year! \n");
                 else if
-                    (ThisYearContestantsNum >= LastYearContestantsNum && ThisYearContestantsNum < (2 * LastYearContestantsNum))
-                    Console.WriteLine("The competition is bigger than ever!");
-                else 
+                    (ThisYearContestantsNum >= LastYearContestantsNum || ThisYearContestantsNum  <= (2 * LastYearContestantsNum))
+                    Console.WriteLine("The competition is bigger than ever! \n");
+                else if 
+                    (ThisYearContestantsNum < LastYearContestantsNum)
                 {
                     Console.WriteLine("A tighter race this year! Come out and cast your vote! \n");
                 }
-                // Step 4
-                Console.WriteLine("Please enter each contestant name below: ");
-                UserNamesInput = Convert.ToString(Console.ReadLine());
-                // Console.WriteLine(UserNamesInput);
-
-                Console.WriteLine("Please indicate {0}'s type of talent using the codes below: ", UserNamesInput);
-                Console.WriteLine("S for singing, D for dancing, M for playing a musical instrument or O for other.");
-
-                ContestantTalent = Convert.ToChar(Console.ReadLine());
-                Console.WriteLine(ContestantTalent);
             }
-
-        }
-
-       
-
-    
+            // Step 4
+            for (x = 0; x < UserNamesInputs.Length; ++x)
+            {
+                Console.WriteLine("Please enter the name(s) of the {0} contestants for this year: \n", ThisYearContestantsNum);
+                Console.WriteLine("Contestant number: {0}", (x + 1));
+                UserNamesInputs[x] = Convert.ToString(Console.ReadLine());
+                // Console.WriteLine(UserNamesInputs[x]);
+                // x++;
+            }
+            for (x = 0; x < UserNamesInputs.Length; ++x)
+            {
+                // Console.WriteLine(UserNamesInputs[x].ToString());
+                x = ThisYearContestantsNum;
+            }
+            // Console.ReadLine(); 
+            Console.WriteLine("{0, 3}", UserNamesInputs[x].ToString());
+        }   
     }
 }
+
+
+//Console.WriteLine("Please enter each contestant name below: ");
+//UserNamesInputs = Convert.ToString(Console.ReadLine());
+//// Console.WriteLine(UserNamesInputs);
+
+//Console.WriteLine("Please indicate {0}'s type of talent using the codes below: ", UserNamesInputs);
+//Console.WriteLine("S for singing, D for dancing, M for playing a musical instrument or O for other.");
+
+//ContestantTalent = Convert.ToChar(Console.ReadLine());
+//Console.WriteLine(ContestantTalent);
+
+//if (!(ContestantTalent == SINGING || ContestantTalent == DANCING || ContestantTalent == MUSICAL || ContestantTalent == OTHER))
+//{
+//    Console.WriteLine("Please enter one of the correct codes below :");
+//    Console.WriteLine("S for singing, D for dancing, M for playing a musical instrument or O for other.");
+//    ContestantTalent = Convert.ToChar(Console.ReadLine());
+//}
+//else
+//{
+
+//}

@@ -25,34 +25,45 @@
 using System;
 class QueenslandRevenue
 {
+
     static void Main()
     {
 
         int LastYearContestantsNum;
-        int ThisYearContestantsNum;   
-        int TalentCount =0;
+        int ThisYearContestantsNum;
         int x;
 
         string[] NamesOfTalents = new string[4];
         string[] UserNamesInputs = new string[4];
         char[] ContestantTalent = new char[4];
-        char response;
-    
-        bool talentCode = true;
+        char response= '-';
+
+        Dictionary<char, List<string>> participantsWithTalentCodes = new Dictionary<char, List<string>>
+        {
+            {'S', new List<string>() },
+            {'D', new List<string>() },
+            {'M', new List<string>() },
+            {'O', new List<string>() }
+        };
+
+
         // Step 1
         Console.WriteLine("Step 1"); 
 
         Console.WriteLine("Please enter the number of contestants participated in the competitions last year - (Number should be between 0 and 30): ");
-        LastYearContestantsNum = Convert.ToInt32(Console.ReadLine());
 
-        if (!(LastYearContestantsNum >= 0 && LastYearContestantsNum <= 30))
+        // Validate the input must be an integer and withing the specified range
+        if (!(int.TryParse(Console.ReadLine(),out LastYearContestantsNum) 
+            &&  LastYearContestantsNum >= 0
+            && LastYearContestantsNum <= 30))
             Console.WriteLine("A valid contestants number should be between 0 and 30 inclusive. Please try again: ");
         else
         {
             Console.WriteLine("Please enter the number of contestants participated this year - (Again, number should be between 0 and 30: ");
-            ThisYearContestantsNum = Convert.ToInt32(Console.ReadLine());
 
-            if (!(ThisYearContestantsNum >= 0 && ThisYearContestantsNum <= 30))
+            if (!(int.TryParse(Console.ReadLine(), out ThisYearContestantsNum) 
+                && ThisYearContestantsNum >= 0 
+                && ThisYearContestantsNum <= 30))
                 Console.WriteLine("A valid contestants number should be between 0 and 30. Please try again: ");
 
             else
@@ -68,7 +79,8 @@ class QueenslandRevenue
                 if (ThisYearContestantsNum > (2 * LastYearContestantsNum))
                     Console.WriteLine("The competition is more than twice as big this year! \n");
                 else if
-                    (ThisYearContestantsNum >= LastYearContestantsNum || ThisYearContestantsNum  <= (2 * LastYearContestantsNum))
+                    (ThisYearContestantsNum >= LastYearContestantsNum 
+                    || ThisYearContestantsNum  <= (2 * LastYearContestantsNum))
                     Console.WriteLine("The competition is bigger than ever! \n");
                 else if 
                     (ThisYearContestantsNum < LastYearContestantsNum)
@@ -83,10 +95,15 @@ class QueenslandRevenue
             {
                 Console.WriteLine("Please enter the name(s) of the {0} contestants for this year: \n", ThisYearContestantsNum);
                 Console.WriteLine("Contestant number: {0}", (x + 1));
-                UserNamesInputs[x] = Convert.ToString(Console.ReadLine());
+                var input = Console.ReadLine();
+                if(!string.IsNullOrEmpty(input))
+                {
+                    UserNamesInputs[x] = Convert.ToString(input);
+                }
+                
                 // Console.WriteLine(UserNamesInputs[x]);
-
             }
+
             for (x = 0; x < UserNamesInputs.Length; ++x)
             {
                 if (UserNamesInputs.Length != 4)
@@ -100,72 +117,76 @@ class QueenslandRevenue
                 }
             }
             // promote user to enter talent code 
-            for (x = 0; x < ContestantTalent.Length; ++x)
+            for (x = 0; x < ContestantTalent.Length;)
             {
                 Console.WriteLine("Please indicate ({0})'s type of talent using the codes below: ", UserNamesInputs[x]);
                 Console.WriteLine("S for singing, D for dancing, M for playing a musical instrument or O for other.");
 
-                ContestantTalent[x] = Convert.ToChar(Console.ReadLine());
-                
-                if (ContestantTalent[x] == 'S' || ContestantTalent[x] == 'D' || ContestantTalent[x] == 'M' || ContestantTalent[x] == 'O')
+                var input = Console.ReadLine();
+                var inputChar= '-';
+                if (!string.IsNullOrEmpty(input) && input.Length ==1 )
                 {
-                    Console.WriteLine("Please repeat the code again to confirm...");
-                    ContestantTalent[x] = Convert.ToChar(Console.ReadLine());
+                    inputChar = Convert.ToChar(input);
+                }
+                
+
+                if (inputChar == 'S' || inputChar == 'D' || inputChar == 'M' || inputChar == 'O')
+                {                   
+                    participantsWithTalentCodes[inputChar].Add(UserNamesInputs[x]); 
+                    ContestantTalent[x] = inputChar;
+                    x += 1;
                 }
                 else
                 {
-                    Console.WriteLine("You entered the wrong talent code! ({0}) \n", ContestantTalent[x]);                  
-                    x--;
+                    Console.WriteLine("You entered the wrong talent code! ({0}) \n", inputChar);                   
                 }
+             
             }
 
-            for (x = 0; x < ContestantTalent.Length; ++x)
+            foreach (var key in participantsWithTalentCodes.Keys)
             {
-                if (ContestantTalent.Length == null)
-                {
-                    Console.WriteLine("The number of talents entered is {0}", ContestantTalent.Length);
-                }
-                else
-                {
-                    Console.WriteLine("You attached the talents: {0} to the contestant: {1}", ContestantTalent[x].ToString(), UserNamesInputs[x].ToString());
-                }
+                var values = string.Join(',', participantsWithTalentCodes[key]);
+                Console.WriteLine("You attached the talents: {0} to the contestant: {1}", key, values);
             }
 
             // Step 5
             Console.WriteLine("Step 5");
 
             Console.WriteLine("Select one of the talent codes (S, D, M, O) to know the count or type Y to stop: ");
-            response = Convert.ToChar(Console.ReadLine()) ;
-
-            for (x = 0; x < ContestantTalent.Length; ++x)
+            while (true)
             {
-                if (response == ContestantTalent[x] && (talentCode = true))
+                var matchingKey = '-';
+                var question = Console.ReadLine();
+                if (!string.IsNullOrEmpty(question) && question.Length == 1)
                 {
-                    // StringResponse = Convert.ToString(ContestantTalent[x]); 
-                    TalentCount++;
+                    response = Convert.ToChar(question);
                 }
-                else if (response == 'Y')
+
+                foreach (var key in participantsWithTalentCodes.Keys)
                 {
-                    talentCode = false;
-                }                 
+                    if (key == response)
+                    {
+                        matchingKey = key;
+                        break;
+                    }
+                }
+                if(matchingKey != '-')
+                {
+                    var values = string.Join(',', participantsWithTalentCodes[matchingKey]);
+                    Console.WriteLine("Count for the talents {0} ", participantsWithTalentCodes[matchingKey].Count);
+                    Console.WriteLine("Names with the key {0} are {1} ", matchingKey, values);
+                }
+                else if(response != 'Y') {
+                    Console.WriteLine("You have entered the wrong code!");
+                    Console.WriteLine("Select one of the talent codes (S, D, M, O) to know the count or type Y to stop: ");
+                }
+
+                //When the user hit Y, Then exist the loop
+                if (response == 'Y')
+                    break;
             }
 
-            if (talentCode = true && response != 'Y')
-            {
-                Console.WriteLine("For the ({0}) contensts of this year competition: ", ThisYearContestantsNum);
-                Console.WriteLine("The count is ({0}) for talent ({1})", TalentCount, response);
-            }
-            else if (talentCode == false)
-            {
-                // Console.WriteLine(UserNamesInputs[x]);
-                Console.WriteLine("We have ({0}) contestants this year and we hope to see you in next year competition!");
-            }
-            else 
-            {
-                Console.WriteLine("The code is not valid!");
-                Console.WriteLine("Select one of the talent codes (S, D, M, O) to know the count or type Y to stop:");
-            }
-            // NamesOfTalents = UserNamesInputs[x].Select(x => x.ToString()).ToArray();
+            Console.WriteLine("Count of the talents are {0}", UserNamesInputs.Length);
 
         }
     }
